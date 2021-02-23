@@ -21,6 +21,7 @@ def run(*args):
 
     JGED.-
         ''')
+        return
 
     path_template = args[0]
     path_recipients = args[1]
@@ -31,10 +32,11 @@ def run(*args):
         reader = csv.reader(f)
         recipients = list(reader)
 
-    image_name='image01'
+    image_filename='logo_uaysen_01.jpg'
+
     json_context = {
-        'user': 'José',
-        'image_name': image_name
+        'user': 'alumn@',
+        'image_filename': image_filename
     }
     path_html_template = os.path.join(settings.BASE_DIR, path_template)
     message = get_template(path_html_template).render(json_context)
@@ -47,12 +49,11 @@ def run(*args):
         [recipient[0] for recipient in recipients],
         reply_to=['no-responder@uaysen.cl'],
     )
-    with open(os.path.join(settings.BASE_DIR, 'static/image-1.png'), mode='rb') as f:
+    with open(os.path.join(settings.BASE_DIR, 'static/'+image_filename), mode='rb') as f:
         image = MIMEImage(f.read())
         email.attach(image)
-        image.add_header('Content-ID', f"<{image_name}>")
+        image.add_header('Content-ID', f"<{image_filename}>")
     
     email.content_subtype = "html"
     email.send()
-    
     
